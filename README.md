@@ -3,9 +3,7 @@ GEOG 676 - GIS Programming
 
 |Labs    |
 |:------:|
-|[lab_1](lab_1README.md)| 
-# NSF Access email sbingham93@tamu.edu
-# NSF Access ID sbingham
+|[lab_1](lab_1README.md)| # NSF ACCESS ID
 |[lab_2](lab_2README.md)|
 |[lab_3](lab_3README.md)|
 |[lab_4](lab_4README.md)|
