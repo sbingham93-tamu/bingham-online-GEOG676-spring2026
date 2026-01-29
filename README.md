@@ -6,11 +6,8 @@ GEOG 676 - GIS Programming
 |[lab_1](lab_1README.md)| 
 <details>
   <summary>lab_1</summary>
-
 ###Lab 1
 ID: sbingham, Email: sbingham93@tamu.edu
-
-</details>
 |[lab_2](lab_2README.md)|
 |[lab_3](lab_3README.md)|
 |[lab_4](lab_4README.md)|
