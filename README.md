@@ -3,7 +3,7 @@ GEOG 676 - GIS Programming
 
 |Labs    |
 |:------:|
-|[lab_1](lab_1README.md)| <summary><a href="#"><strong>lab_7</strong></a></summary>
+|[lab_1](lab_1README.md)sb| 
 |[lab_2](lab_2README.md)|
 |[lab_3](lab_3README.md)|
 |[lab_4](lab_4README.md)|
