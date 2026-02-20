@@ -16,12 +16,20 @@ garages = arcpy.MakeXYEventLayer_management(csv_path, 'X', 'Y', garage_layer_nam
 
 garage_points = gdb_path + '\\' + garage_layer_name
 
+
 # open campus gdb, copy building feature to our gdb
-campus = r'C:C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\Campus.gdb'
+campus = r'C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\Campus.gdb'
 buildings_campus = campus + r'\Structures'
 buildings = gdb_path + r'\\' + 'Buildings'
 
-arcpy.Copy_management(buildings_campus, buildings)
+# Only copy if input exists and output does not exist
+if arcpy.Exists(buildings_campus):
+	if not arcpy.Exists(buildings):
+		arcpy.Copy_management(buildings_campus, buildings)
+	else:
+		print(f"Output {buildings} already exists. Skipping copy.")
+else:
+	print(f"Input {buildings_campus} does not exist. Skipping copy.")
 
 # Re-Projection
 spatial_ref = arcpy.Describe(buildings).spatialReference
