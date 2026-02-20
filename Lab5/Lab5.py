@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-import os
-
 import arcpy
 
 
@@ -33,42 +31,42 @@ class BuildingProximity(object):
             datatype="DEFolder",
             parameterType="Required",
             direction="Input"
-        )
+             )
         param1 = arcpy.Parameter(
             displayName="GDB Name",
             name="GDBName",
             datatype="GPString",
             parameterType="Required",
             direction="Input"
-        )
+             )
         param2 = arcpy.Parameter(
             displayName="Garage CSV File",
             name="GarageCSVFile",
             datatype="DEFile",
             parameterType="Required",
             direction="Input"
-        )
+             )
         param3 = arcpy.Parameter(
             displayName="Garage Layer Name",
             name="GarageLayerName",
             datatype="GPString",
             parameterType="Required",
             direction="Input"
-        )
+             )
         param4 = arcpy.Parameter(
             displayName="Campus GDB",
             name="CampusGDB",
             datatype="DEWorkspace",
             parameterType="Required",
             direction="Input"
-        )
+             )
         param5 = arcpy.Parameter(
             displayName="Buffer Distance",
             name="BufferDistance",
             datatype="GPDouble",
             parameterType="Required",
             direction="Input"
-        )
+             )
         params =  [param0, param1, param2, param3, param4, param5]
         return params
     
@@ -96,47 +94,27 @@ class BuildingProximity(object):
 
         csv_path = parameters[2].valueAsText
         garage_layer_name = parameters[3].valueAsText
-
         garages = arcpy.MakeXYEventLayer_management(csv_path, "X", "Y", garage_layer_name)
 
         input_layer = garages
         arcpy.FeatureClassToGeodatabase_conversion(input_layer, gdb_path)
-
         garage_points = gdb_path + '\\' + garage_layer_name
 
         campus_gdb = parameters[4].valueAsText
-        import os
-        buildings_campus = os.path.join(campus_gdb, "Structures")
+        buildings_campus = campus, '\Structures'
         buildings = gdb_path + '\\' + 'Buildings'
 
         arcpy.management.CopyFeatures(buildings_campus, buildings)
 
+
         spatial_ref = arcpy.Describe(buildings).spatialReference
+        arcpy.Project_management(garage_points, gdb_path + r'\Garage_Points_reprojected', spatial_ref)
 
-        arcpy.Project_management(
-            garage_points, 
-            gdb_path + r'\Garage_Points_reprojected', 
-            spatial_ref
-        )
+        buffer_distance = int(parameters[5].value)"
+        garageBuffered = arcpy.Buffer_analysis(gdb_path + '\Garage_Points_reprojected',gdb_path + '\Garage_Points_buffered', 150)
 
-        buffer_distance = f"{parameters[5].value} Feet"
+        arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + '\Garage_Building_Intersect', 'ALL')
 
-        garageBuffered = arcpy.Buffer_analysis(
-            gdb_path + r'\Garage_Points_reprojected',
-            gdb_path + r'\Garage_Points_buffered', 
-            buffer_distance
-        )
-
-        arcpy.Intersect_analysis(
-            [garageBuffered, buildings], 
-            gdb_path + r'\Garage_Building_Intersect', 
-            'ALL'
-        )
-
-        arcpy.TableToTable_conversion(
-            gdb_path + r'\Garage_Building_Intersect', 
-            r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5', 
-            'nearbyBuildings'
-        )
+        arcpy.TableToTable_conversion(gdb_path + '\Garage_Building_Intersect', r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5', 'nearbyBuildings')
                                       
         return None
