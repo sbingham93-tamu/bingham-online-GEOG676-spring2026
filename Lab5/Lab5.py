@@ -28,7 +28,7 @@ class BuildingProximity(object):
         param0 = arcpy.Parameter(
             displayName="GDB Folder",
             name="GDBFolder",
-            datatype="DEFolder",
+            datatype="DEWorkspace",
             parameterType="Required",
             direction="Input"
              )
