@@ -1,72 +1,36 @@
 
 # create a gdb and garage feature
-import os
 import arcpy
 
-arcpy.env.overwriteOutput = True
+arcpy.env.workspace = r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab4\codes_env'
+folder_path = r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab4'
+gdb_name = 'Lab04.gdb'
+gdb_path = folder_path + '\\' + gdb_name
+arcpy.CreateFileGDB_management(folder_path, gdb_name)
 
-# -------------------------------
-# INPUT DATA (from cloned repo)
-# -------------------------------
-repo_dir = r"C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04"
+csv_path = r'C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\\garages.csv'
+garage_layer_name = 'Garage_Points'
+garages = arcpy.MakeXYEventLayer_management(csv_path, 'X', 'Y', garage_layer_name)
 
-csv_path = os.path.join(repo_dir, "garages.csv")
-campus_gdb = os.path.join(repo_dir, "Campus.gdb")
-structures_fc = os.path.join(campus_gdb, "Structures")
+input_layer = garages
+arcpy.FeatureClassToGeodatabase_conversion(input_layer, gdb_path)
+garage_points = gdb_path + '\\' + garage_layer_name
 
-# -------------------------------
-# OUTPUT LOCATION (your Lab4 folder)
-# -------------------------------
-lab4_dir = r"C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab4"
-arcpy.env.workspace = lab4_dir
+# open campus gdb, copy building feature to our gdb
+campus = r'C:C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\Campus.gdb'
+buildings_campus = campus + '\Structures'
+buildings = gdb_path + '\\' + 'Buildings'
 
-gdb_name = "Lab04.gdb"
-out_gdb = os.path.join(lab4_dir, gdb_name)
+arcpy.Copy_management(buildings_campus, buildings)
 
-# Create GDB if it doesn't exist
-if not arcpy.Exists(out_gdb):
-    arcpy.management.CreateFileGDB(lab4_dir, gdb_name)
-
-# -------------------------------
-# 1) Create garage points from CSV
-# -------------------------------
-garage_layer = "Garage_Points_Lyr"
-arcpy.management.MakeXYEventLayer(csv_path, "X", "Y", garage_layer)
-
-garage_points = os.path.join(out_gdb, "Garage_Points")
-arcpy.management.CopyFeatures(garage_layer, garage_points)
-
-# -------------------------------
-# 2) Copy buildings into our GDB
-# -------------------------------
-buildings = os.path.join(out_gdb, "Buildings")
-arcpy.management.CopyFeatures(structures_fc, buildings)
-
-# -------------------------------
-# 3) Reproject garages to match buildings
-# -------------------------------
+# Re-Projection
 spatial_ref = arcpy.Describe(buildings).spatialReference
+arcpy.Project_management(garage_points, gdb_path + '\Garage_Points_reprojected', spatial_ref)
 
-garage_points_reproj = os.path.join(out_gdb, "Garage_Points_reprojected")
-arcpy.management.Project(garage_points, garage_points_reproj, spatial_ref)
+# buffer the garages
+garageBuffered = arcpy.Buffer_analysis(gdb_path + '\Garage_Points_reprojected', gdb_path + '\Garage_Points_buffered', 150)
 
-# -------------------------------
-# 4) Buffer the garages
-# -------------------------------
-garage_buffer = os.path.join(out_gdb, "Garage_Points_buffered")
-arcpy.analysis.Buffer(garage_points_reproj, garage_buffer, "150")
+# Intersect our buffer with the buildings
+arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + '\Garage_Building_Intersection', 'ALL')
 
-# -------------------------------
-# 5) Intersect buffer with buildings
-# -------------------------------
-intersection_fc = os.path.join(out_gdb, "Garage_Building_Intersection")
-arcpy.analysis.Intersect([garage_buffer, buildings], intersection_fc, "ALL")
-
-# -------------------------------
-# 6) Export to CSV in Lab4 folder
-# -------------------------------
-arcpy.conversion.TableToTable(
-    intersection_fc,
-    lab4_dir,
-    "nearbyBuildings.csv"
-)
+arcpy.TableToTable_conversion(gdb_path + '\Garage_Building_Intersection.dbf', 'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab4', 'nearbyBuildings.csv')
