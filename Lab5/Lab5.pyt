@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
+import os
+
 import arcpy
 
 
@@ -103,10 +105,11 @@ class BuildingProximity(object):
         garage_points = gdb_path + '\\' + garage_layer_name
 
         campus_gdb = parameters[4].valueAsText
-        buildings_campus = campus_gdb + r'\Structures'
+        import os
+        buildings_campus = os.path.join(campus_gdb, "Structures")
         buildings = gdb_path + '\\' + 'Buildings'
 
-        arcpy.Copy_management(buildings_campus, buildings)
+        arcpy.management.CopyFeatures(buildings_campus, buildings)
 
         spatial_ref = arcpy.Describe(buildings).spatialReference
 
@@ -132,7 +135,7 @@ class BuildingProximity(object):
 
         arcpy.TableToTable_conversion(
             gdb_path + r'\Garage_Building_Intersect', 
-            r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026', 
+            r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5', 
             'nearbyBuildings'
         )
                                       
