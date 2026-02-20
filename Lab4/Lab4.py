@@ -6,30 +6,22 @@ arcpy.env.workspace = r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-sprin
 folder_path = r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab4'
 gdb_name = 'Lab04.gdb'
 gdb_path = folder_path + '\\' + gdb_name
-import os
-if not os.path.exists(gdb_path):
-	arcpy.CreateFileGDB_management(folder_path, gdb_name)
+arcpy.CreateFileGDB_management(folder_path, gdb_name)
 
 csv_path = r'C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\\garages.csv'
 garage_layer_name = 'Garage_Points'
 garages = arcpy.MakeXYEventLayer_management(csv_path, 'X', 'Y', garage_layer_name)
 
+input_layer = garages
+arcpy.FeatureClassToGeodatabase_conversion(input_layer, gdb_path)
 garage_points = gdb_path + '\\' + garage_layer_name
-
 
 # open campus gdb, copy building feature to our gdb
 campus = r'C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\Campus.gdb'
 buildings_campus = campus + r'\Structures'
 buildings = gdb_path + r'\\' + 'Buildings'
 
-# Only copy if input exists and output does not exist
-if arcpy.Exists(buildings_campus):
-	if not arcpy.Exists(buildings):
-		arcpy.Copy_management(buildings_campus, buildings)
-	else:
-		print(f"Output {buildings} already exists. Skipping copy.")
-else:
-	print(f"Input {buildings_campus} does not exist. Skipping copy.")
+arcpy.Copy_management(buildings_campus, buildings)
 
 # Re-Projection
 spatial_ref = arcpy.Describe(buildings).spatialReference
