@@ -110,7 +110,7 @@ class BuildingProximity(object):
         spatial_ref = arcpy.Describe(buildings).spatialReference
         arcpy.Project_management(garage_points, gdb_path + r'\Garage_Points_reprojected', spatial_ref)
 
-        buffer_distance = int(parameters[5].value)"
+        buffer_distance = int(parameters[5].value)
         garageBuffered = arcpy.Buffer_analysis(gdb_path + '\Garage_Points_reprojected',gdb_path + '\Garage_Points_buffered', 150)
 
         arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + '\Garage_Building_Intersect', 'ALL')
