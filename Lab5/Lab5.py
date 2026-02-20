@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
+import os
+
 import arcpy
 
 
@@ -103,7 +105,8 @@ class BuildingProximity(object):
         garage_points = gdb_path + '\\' + garage_layer_name
 
         campus_gdb = parameters[4].valueAsText
-        buildings_campus = campus_gdb + r'\Structures'
+        import os
+        buildings_campus = os.path.join(campus_gdb, "Structures")
         buildings = gdb_path + '\\' + 'Buildings'
 
         arcpy.Copy_management(buildings_campus, buildings)
