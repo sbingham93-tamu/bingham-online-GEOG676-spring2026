@@ -109,7 +109,7 @@ class BuildingProximity(object):
         buildings_campus = os.path.join(campus_gdb, "Structures")
         buildings = gdb_path + '\\' + 'Buildings'
 
-        arcpy.Copy_management(buildings_campus, buildings)
+        arcpy.management.CopyFeatures(buildings_campus, buildings)
 
         spatial_ref = arcpy.Describe(buildings).spatialReference
 
