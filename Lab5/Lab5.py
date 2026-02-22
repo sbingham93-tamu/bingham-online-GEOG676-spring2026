@@ -121,7 +121,7 @@ class BuildingProximity(object):
 
         arcpy.TableToTable_conversion(
             gdb_path + r"\Garage_Building_Intersect",
-            r"C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5",
+            r"C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\Campus.gdb",
             "nearbyBuildings"
         )
                                       
