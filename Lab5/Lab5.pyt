@@ -101,20 +101,28 @@ class BuildingProximity(object):
         garage_points = gdb_path + '\\' + garage_layer_name
 
         campus_gdb = parameters[4].valueAsText
-        buildings_campus = campus, '\Structures'
+        buildings_campus = campus_gdb + r"\Structures"
         buildings = gdb_path + '\\' + 'Buildings'
 
         arcpy.management.CopyFeatures(buildings_campus, buildings)
 
-
         spatial_ref = arcpy.Describe(buildings).spatialReference
-        arcpy.Project_management(garage_points, gdb_path + r'\Garage_Points_reprojected', spatial_ref)
+       arcpy.Project_management(garage_points, gdb_path + r"\Garage_Points_reprojected", spatial_ref)
+        
+        buffer_distance = float(parameters[5].value)
 
-        buffer_distance = int(parameters[5].value)
-        garageBuffered = arcpy.Buffer_analysis(gdb_path + '\Garage_Points_reprojected',gdb_path + '\Garage_Points_buffered', 150)
+        garageBuffered = arcpy.Buffer_analysis(
+        gdb_path + r"\Garage_Points_reprojected",
+        gdb_path + r"\Garage_Points_buffered",
+        buffer_distance
+        )
+        
+        arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + r"\Garage_Building_Intersect", "ALL")
 
-        arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + '\Garage_Building_Intersect', 'ALL')
-
-        arcpy.TableToTable_conversion(gdb_path + '\Garage_Building_Intersect', r'C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5', 'nearbyBuildings')
+        arcpy.TableToTable_conversion(
+        gdb_path + r"\Garage_Building_Intersect",
+        r"C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5",
+        "nearbyBuildings"
+        )
                                       
         return None
