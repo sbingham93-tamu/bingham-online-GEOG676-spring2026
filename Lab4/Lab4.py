@@ -28,6 +28,7 @@ spatial_ref = arcpy.Describe(buildings).spatialReference
 arcpy.Project_management(garage_points, gdb_path + r"\Garage_Points_reprojected", spatial_ref)
 
 # buffer the garages
+buffer_distance = "150 Meters"
 garageBuffered = arcpy.Buffer_analysis(
 gdb_path + r"\Garage_Points_reprojected",
 gdb_path + r"\Garage_Points_buffered",
