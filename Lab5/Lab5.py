@@ -107,22 +107,22 @@ class BuildingProximity(object):
         arcpy.management.CopyFeatures(buildings_campus, buildings)
 
         spatial_ref = arcpy.Describe(buildings).spatialReference
-       arcpy.Project_management(garage_points, gdb_path + r"\Garage_Points_reprojected", spatial_ref)
+        arcpy.Project_management(garage_points, gdb_path + r"\Garage_Points_reprojected", spatial_ref)
         
         buffer_distance = float(parameters[5].value)
 
         garageBuffered = arcpy.Buffer_analysis(
-        gdb_path + r"\Garage_Points_reprojected",
-        gdb_path + r"\Garage_Points_buffered",
-        buffer_distance
+            gdb_path + r"\Garage_Points_reprojected",
+            gdb_path + r"\Garage_Points_buffered",
+            buffer_distance
         )
         
         arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + r"\Garage_Building_Intersect", "ALL")
 
         arcpy.TableToTable_conversion(
-        gdb_path + r"\Garage_Building_Intersect",
-        r"C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5",
-        "nearbyBuildings"
+            gdb_path + r"\Garage_Building_Intersect",
+            r"C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5",
+            "nearbyBuildings"
         )
                                       
         return None
