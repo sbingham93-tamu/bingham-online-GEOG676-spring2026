@@ -44,6 +44,6 @@ arcpy.Intersect_analysis(
 
 arcpy.TableToTable_conversion(
     gdb_path + r"\Garage_Building_Intersect",
-    r"C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\Campus.gdb\Garage_Building_Intersection",
-    "nearbyBuildings.csv"
+    r"C:\Users\sbing\TAMU\GEOG676\TAMU-MGSc-Online-GEOG676-GIS-PROGRAMMING\data\homework\04\Campus.gdb",
+    "nearbyBuildings"
 )
