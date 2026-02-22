@@ -115,14 +115,14 @@ class BuildingProximity(object):
             gdb_path + r"\Garage_Points_reprojected",
             gdb_path + r"\Garage_Points_buffered",
             buffer_distance
-            )
-            
+        )
+        
         arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + r"\Garage_Building_Intersect", "ALL")
 
         arcpy.TableToTable_conversion(
             gdb_path + r"\Garage_Building_Intersect",
             r"C:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab5",
             "nearbyBuildings"
-            )
-                                          
+        )
+                                      
         return None
