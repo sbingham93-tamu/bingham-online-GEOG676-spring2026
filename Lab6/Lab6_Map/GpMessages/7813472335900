@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?><messages><msg code="0" type="2">Start Time: Thursday, February 26, 2026 12:53:16 PM</msg><msg code="1" type="100">Traceback (most recent call last):
+﻿  File "E:\Users\sbing\TAMU\GEOG676\bingham-online-GEOG676-spring2026\Lab6\Lab6_Maptool.pyt", line 84, in execute
+    time.sleep(readTime) #pause the excution for 3 seconds
+    ^^^^
+﻿NameError: name 'time' is not defined. Did you forget to import 'time'?
+﻿</msg><msg code="-2147467259" type="100">Failed to execute (GraduatedColorsRenderer).</msg><msg code="0" type="3">Failed at Thursday, February 26, 2026 12:53:17 PM (Elapsed Time: 0.90 seconds)</msg></messages>
